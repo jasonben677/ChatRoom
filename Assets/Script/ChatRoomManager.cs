@@ -53,7 +53,7 @@ public class ChatRoomManager : MonoBehaviour
             if (timer <= 0.01)
             {
                 client.Run();
-                Debug.Log("run");
+                //Debug.Log("run");
                 timer = 1.5f;
             }
             else
@@ -109,12 +109,9 @@ public class ChatRoomManager : MonoBehaviour
     public void MessageShow(string _message)
     {
         RectTransform parentObj = scroll.content;
-        parentObj.sizeDelta += new Vector2(0, 60);
-        int counts = parentObj.childCount;
         Text copt = Instantiate(messageSimple, parentObj);
         copt.text = _message;
         copt.transform.localScale = Vector3.one;
-        copt.transform.localPosition = new Vector3(0, counts * 60, 0);
         copt.gameObject.SetActive(true);
     }
 }

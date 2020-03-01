@@ -38,7 +38,7 @@ public class ChatClient
                 }
             }
             mClient.Connect(address.ToString(), _port);
-            Debug.Log("Connected to Chat Server: " + _address + ":" + _port + "\n");
+            //Debug.Log("Connected to Chat Server: " + _address + ":" + _port + "\n");
 
             return true;
         }
