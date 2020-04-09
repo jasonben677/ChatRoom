@@ -63,6 +63,13 @@ public class ChatClient
         mClient.GetStream().Write(requestBuffer, 0, requestBuffer.Length);
     }
 
+    public void SendAccount(string _account, string _password)
+    {
+        string request = "Account:" + _account + ":" + _password;
+        byte[] requestBuffer = System.Text.Encoding.ASCII.GetBytes(request);
+        mClient.GetStream().Write(requestBuffer, 0, requestBuffer.Length);
+    }
+
     public void Run()
     {
         if (mClient.Available > 0)
@@ -88,6 +95,12 @@ public class ChatClient
             string sMessage = aTokens[2];
             //Debug.Log(sName + " said: " + sMessage);
             RoomManager.MessageShow(sName + " said: " + sMessage);
+        }
+        if (request.StartsWith("Login:", StringComparison.OrdinalIgnoreCase))
+        {
+            string[] aTokens = request.Split(':');
+            string sName = aTokens[1];
+            //Debug.Log(sName + " said: " + sMessage);
         }
     }
 }

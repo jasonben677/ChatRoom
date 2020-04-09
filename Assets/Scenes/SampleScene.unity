@@ -191,7 +191,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 466566434}
+      - m_Target: {fileID: 0}
         m_MethodName: SendName
         m_Mode: 1
         m_Arguments:
@@ -489,7 +489,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 466566434}
+      - m_Target: {fileID: 0}
         m_MethodName: SendMessage
         m_Mode: 1
         m_Arguments:
@@ -547,7 +547,6 @@ GameObject:
   - component: {fileID: 466566432}
   - component: {fileID: 466566431}
   - component: {fileID: 466566430}
-  - component: {fileID: 466566434}
   m_Layer: 5
   m_Name: MainPage
   m_TagString: Untagged
@@ -638,24 +637,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &466566434
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 466566429}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 72d29449710c5824480597d168f78fff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  status: 0
-  IP: {fileID: 2066183420}
-  Name: {fileID: 1430062678}
-  Speak: {fileID: 2137814709}
-  scroll: {fileID: 190097734}
-  messageSimple: {fileID: 2097156071}
 --- !u!1 &534669902
 GameObject:
   m_ObjectHideFlags: 0
@@ -1828,7 +1809,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 466566434}
+      - m_Target: {fileID: 0}
         m_MethodName: SendIP
         m_Mode: 1
         m_Arguments:
