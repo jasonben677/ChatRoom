@@ -6,7 +6,7 @@ using UnityEngine;
 public class ChatRoomManager : MonoBehaviour
 {
 
-    public int status = 0;
+    public int status = 3;
 
     public InputField IP;
     public InputField Name;
@@ -68,6 +68,13 @@ public class ChatRoomManager : MonoBehaviour
             Speak.text = "";
             status = 0;
         }
+        else if (status == 3)
+        {
+            page_Name.SetActive(false);
+            page_Speak.SetActive(true);
+            client.SendName(Name.text);
+            status = 0;
+        }
     }
 
     /// <summary>
@@ -87,12 +94,6 @@ public class ChatRoomManager : MonoBehaviour
         client = new ChatClient();
         client.RoomManager = this;
         connectSucceed = client.Connect(IP.text, 4099);
-        if (connectSucceed)
-        {
-            page_Name.SetActive(false);
-            page_Speak.SetActive(true);
-            client.SendName(Name.text);
-        }
     }
 
     /// <summary>
@@ -100,6 +101,7 @@ public class ChatRoomManager : MonoBehaviour
     /// </summary>
     public void SendMessage()
     {
+        client.messageProcess = MessageShow;
         status = 1;
     }
 
@@ -113,5 +115,17 @@ public class ChatRoomManager : MonoBehaviour
         copt.text = _message;
         copt.transform.localScale = Vector3.one;
         copt.gameObject.SetActive(true);
+    }
+
+    public void LoginCheck(string _bool)
+    {
+        if (_bool == "yes")
+        {
+            status = 3;
+        }
+        else
+        { 
+            
+        }
     }
 }

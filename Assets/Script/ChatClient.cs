@@ -1,13 +1,18 @@
 ﻿using System;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Linq;
 using System.Net;
 using UnityEngine;
+using TestDll;
 
 public class ChatClient
 {
     public ChatRoomManager RoomManager;
+    public delegate void MessageProcess(string _string);
+    public MessageProcess messageProcess;
     TcpClient mClient = null;
     string mAddress = "";
     int mPort;
@@ -53,6 +58,7 @@ public class ChatClient
     {
         string request = "LOGINNAME:" + _name;
         byte[] requestBuffer = System.Text.Encoding.ASCII.GetBytes(request);
+        //byte[] requestBuffer = System.Text.Encoding.ASCII.GetBytes(request);
         mClient.GetStream().Write(requestBuffer, 0, requestBuffer.Length);
     }
 
@@ -65,8 +71,17 @@ public class ChatClient
 
     public void SendAccount(string _account, string _password)
     {
-        string request = "Account:" + _account + ":" + _password;
-        byte[] requestBuffer = System.Text.Encoding.ASCII.GetBytes(request);
+        string request = "Login:" + _account + ":" + _password;
+
+        BinaryFormatter bf = new BinaryFormatter();
+        MemoryStream ms = new MemoryStream();
+        Message sss = new Message();
+        sss.msgDetial = "work";
+        sss.msgType = 6;
+        bf.Serialize(ms, sss);
+        
+        byte[] requestBuffer = ms.ToArray();
+        Debug.Log(requestBuffer.Length);
         mClient.GetStream().Write(requestBuffer, 0, requestBuffer.Length);
     }
 
@@ -85,22 +100,34 @@ public class ChatClient
         int numByte = tcpClient.Available;
         byte[] buffer = new byte[numByte];
         int byteRead = tcpClientStream.Read(buffer, 0, buffer.Length);
-
         string request = System.Text.Encoding.ASCII.GetString(buffer).Substring(0, byteRead);
+
+        if(request.StartsWith("Account:",StringComparison.OrdinalIgnoreCase))
+        {
+            string[] aTokens = request.Split(':');
+            string sAccount = aTokens[1];
+            string sPassword = aTokens[2];
+            if (sAccount == "yes" && sPassword == "yes")
+            {
+                messageProcess?.Invoke("yes");
+            }
+        }
 
         if (request.StartsWith("MESSAGE:", StringComparison.OrdinalIgnoreCase))
         {
             string[] aTokens = request.Split(':');
             string sName = aTokens[1];
             string sMessage = aTokens[2];
-            //Debug.Log(sName + " said: " + sMessage);
-            RoomManager.MessageShow(sName + " said: " + sMessage);
+
+            messageProcess?.Invoke(sName + " said: " + sMessage);
+
         }
         if (request.StartsWith("Login:", StringComparison.OrdinalIgnoreCase))
         {
             string[] aTokens = request.Split(':');
             string sName = aTokens[1];
-            //Debug.Log(sName + " said: " + sMessage);
+            Debug.Log(sName + "login success");
         }
     }
+
 }

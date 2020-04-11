@@ -53,6 +53,7 @@ public class LoginManager : MonoBehaviour
         connectSucceed = client.Connect("127.0.0.1", 4099);
         if (connectSucceed)
         {
+            Debug.Log("connect");
             client.SendAccount(inputAccount.text, inputPassword.text);
         }
     }
