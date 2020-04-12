@@ -1,27 +1,31 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class LoginManager : MonoBehaviour
 {
-    enum loginState
-    { 
-        none = 0,
-        success = 1,
-        fail = 2
-    }
-
-    [SerializeField] InputField inputAccount;
-    [SerializeField] InputField inputPassword;
-
-    loginState State;
+    static public LoginManager instance;
     ChatClient client = null;
     bool connectSucceed = false;
 
+    private void Awake()
+    {
+        if (instance == null)
+        {
+            DontDestroyOnLoad(gameObject);
+            instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
+    }
+
     private void Start()
     {
-        State = loginState.none;
+        Button button = GameObject.Find("LoginButton").GetComponent<Button>();
+        button.onClick.AddListener(() => Login());
     }
 
     private void FixedUpdate()
@@ -29,19 +33,6 @@ public class LoginManager : MonoBehaviour
         if (connectSucceed)
         {
             client.Run();
-            switch (State)
-            {
-                case loginState.none:
-                    break;
-                case loginState.success:
-                    Debug.Log("work");
-                    break;
-                case loginState.fail:
-                    Debug.Log("fail");
-                    break;
-                default:
-                    break;
-            }
         }
     }
 
@@ -54,8 +45,16 @@ public class LoginManager : MonoBehaviour
         if (connectSucceed)
         {
             Debug.Log("connect");
-            client.SendAccount(inputAccount.text, inputPassword.text);
+            string account = GameObject.Find("Account").GetComponent<InputField>().text;
+            string password = GameObject.Find("Password").GetComponent<InputField>().text;
+            client.SendAccount(account, password);
+            client.messageProcess = EnterGameScence;
         }
+    }
+
+    private void EnterGameScence()
+    {
+        SceneManager.LoadScene("GamePlay");
     }
 
 }
