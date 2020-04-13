@@ -11,6 +11,7 @@ public class FriendManager : MonoBehaviour
 
     public void UpdateFirend(Message _player)
     {
+        if (_player == null) return;
         Debug.Log("receive");
         friend.SetActive(true);
         friend.transform.position = new Vector3(_player.x, _player.y, _player.z);
