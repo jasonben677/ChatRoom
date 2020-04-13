@@ -1,13 +1,15 @@
 ﻿using System;
-using System.Net.Sockets;
 using System.Net;
+using System.Net.Sockets;
 using UnityEngine;
 using TestDll;
 
 public class ChatClient
 {
-    public delegate void MessageProcess();
+    public delegate void MessageProcess(Message _player);
     public MessageProcess messageProcess;
+    Message send;
+    Message receive;
     SerializationManager serialManager = new SerializationManager();
     TcpClient mClient = null;
 
@@ -46,11 +48,21 @@ public class ChatClient
 
     public void SendAccount(string _account, string _password)
     {
-        Message c_message = new Message();
-        c_message.msgType = 0;
-        c_message.username = _account;
-        c_message.password = _password;
-        serialManager.SerializeClass(mClient, c_message);
+        send = new Message();
+        send.msgType = 0;
+        send.username = _account;
+        send.password = _password;
+        serialManager.SerializeClass(mClient, send);
+    }
+
+    public void SendPos(float _x, float _y, float _z)
+    {
+        send = (send != null) ? send : new Message();
+        send.msgType = 2;
+        send.x = _x;
+        send.y = _y;
+        send.z = _z;
+        serialManager.SerializeClass(mClient, send);
     }
 
     public void Run()
@@ -61,18 +73,10 @@ public class ChatClient
         }
     }
 
-    public void HandleReceiveMessages(TcpClient tcpClient)
+    private void HandleReceiveMessages(TcpClient tcpClient)
     {
-        Message c_message = serialManager.DeserializeClass(tcpClient);
-        switch ((MessageType)c_message.msgType)
-        {
-            case MessageType.Login:
-                messageProcess?.Invoke();
-                break;
-
-            default:
-                break;
-        }
+        receive = serialManager.DeserializeClass(tcpClient);
+        messageProcess?.Invoke(receive);
     }
 
 }

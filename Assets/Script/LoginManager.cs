@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TestDll;
 
 public class LoginManager : MonoBehaviour
 {
     static public LoginManager instance;
-    ChatClient client = null;
+    public ChatClient client = null;
     bool connectSucceed = false;
 
     private void Awake()
@@ -36,10 +37,22 @@ public class LoginManager : MonoBehaviour
         }
     }
 
+
+    public void SendPos(Vector3 pos)
+    {
+        float newX = (float)System.Math.Round(pos.x, 2);
+        float newY = (float)System.Math.Round(pos.y, 2);
+        float newZ = (float)System.Math.Round(pos.z, 2);
+
+        client.SendPos(newX, newY, newZ);
+    }
     public void Login()
     {
         client = new ChatClient();
+
+        //虛擬機
         //connectSucceed = client.Connect("34.80.167.143", 4099);
+
         //local
         connectSucceed = client.Connect("127.0.0.1", 4099);
         if (connectSucceed)
@@ -52,7 +65,7 @@ public class LoginManager : MonoBehaviour
         }
     }
 
-    private void EnterGameScence()
+    private void EnterGameScence(Message _player)
     {
         SceneManager.LoadScene("GamePlay");
     }
