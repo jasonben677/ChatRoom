@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using TestDll;
 
 public class FriendManager : MonoBehaviour
 {
@@ -9,12 +8,12 @@ public class FriendManager : MonoBehaviour
         friend = transform.GetChild(0).gameObject;
     }
 
-    public void UpdateFirend(Message _player)
+    public void UpdateFirend(Common.Message _player)
     {
         if (_player == null) return;
         Debug.Log("receive");
         friend.SetActive(true);
-        friend.transform.position = new Vector3(_player.x, _player.y, _player.z);
+        //friend.transform.position = new Vector3 (_player.position.x, _player.position.y, _player.position.z);
     }
 
 }

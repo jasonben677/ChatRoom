@@ -19,10 +19,12 @@ public class PlayerMove : MonoBehaviour
         float vmove = Input.GetAxis("Vertical");
         Vector3 vec = transform.forward * vmove + transform.right * hmove;
         myRigi.position += vec * 10f* Time.fixedDeltaTime;
-        if (times >= 1.0f && useServer)
+
+        // 1s傳4次
+        if (times >= 0.25f && useServer)
         {
             LoginManager.instance.SendPos(transform.position);
-            LoginManager.instance.client.messageProcess = Friend.UpdateFirend;
+            //add delegate
             times = 0;
         }
     }

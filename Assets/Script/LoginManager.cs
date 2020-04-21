@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using TestDll;
 
 public class LoginManager : MonoBehaviour
 {
@@ -37,7 +36,15 @@ public class LoginManager : MonoBehaviour
         }
     }
 
+    private void OnDisable()
+    {
+        if (connectSucceed)
+        {
+            client.tranmitter.Close();
+            connectSucceed = false;
+        }
 
+    }
     public void SendPos(Vector3 pos)
     {
         float newX = (float)System.Math.Round(pos.x, 2);
@@ -61,13 +68,15 @@ public class LoginManager : MonoBehaviour
             string account = GameObject.Find("Account").GetComponent<InputField>().text;
             string password = GameObject.Find("Password").GetComponent<InputField>().text;
             client.SendAccount(account, password);
-            client.messageProcess = EnterGameScence;
+            client.tranmitter.Register(0,EnterGameScence);
         }
     }
 
-    private void EnterGameScence(Message _player)
+    private void EnterGameScence(Common.Tranmitter _tran, TestDll.Message03 _message)
     {
-        SceneManager.LoadScene("GamePlay");
+        if(_message.success)
+            SceneManager.LoadScene("GamePlay02");
+        //SceneManager.LoadSceneAsync("GamePlay").isDone;
     }
 
 }
